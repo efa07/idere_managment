@@ -48,11 +48,39 @@ const Members = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Here you would typically send the form data to an API
+  //   console.log("Member registration form submitted!");
+  //   closeModal(); // Close modal after submission
+  // };
+
+  const [familyMembers, setFamilyMembers] = useState([]);
+
+  const addFamilyMember = () => {
+    setFamilyMembers([...familyMembers, { name: "", relation: "", age: "" }]);
+  };
+
+  const handleFamilyChange = (index, field, value) => {
+    const updated = [...familyMembers];
+    updated[index][field] = value;
+    setFamilyMembers(updated);
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to an API
-    console.log("Member registration form submitted!");
-    closeModal(); // Close modal after submission
+    const formData = new FormData(e.target);
+    const householdHead = {
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      status: formData.get("status"),
+    };
+
+    const fullData = { householdHead, familyMembers };
+    console.log("Submitted Data:", fullData);
+
+    // send `fullData` to backend API
   };
 
   return (
@@ -128,12 +156,13 @@ const Members = () => {
       </div>
 
       {/* Member Registration Modal */}
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-100 animate-scale-up">
+          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl transform transition-all duration-300 scale-100 animate-scale-up">
             <div className="flex justify-between items-center mb-6 border-b pb-4">
               <h2 className="text-2xl font-futuristic font-bold text-gray-800">
-                Miseensa Haarawa Galmee
+                Galmee Maatii Haaraa
               </h2>
               <button
                 onClick={closeModal}
@@ -156,74 +185,134 @@ const Members = () => {
               </button>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="space-y-4">
+            {/* Household Head Form */}
+            <form onSubmit={handleFormSubmit} className="space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Maqaa Guutuu
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
-                  placeholder="Maqaa Miseensaa"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Lakkoofsa Bilbilaa
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
-                  placeholder="+251 ..."
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Email Addireesii
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
-                  placeholder="email@example.com"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="status"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Haala
-                </label>
-                <select
-                  id="status"
-                  name="status"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
-                  defaultValue="Active"
-                  required
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                  <option value="Pending">Pending</option>
-                </select>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  Odeeffannoo Abbaa Warraa
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Maqaa Guutuu
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
+                      placeholder="Maqaa Abbaa Warraa"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Lakkoofsa Bilbilaa
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
+                      placeholder="+251 ..."
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Email Addireesii
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
+                      placeholder="email@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="status"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Haala
+                    </label>
+                    <select
+                      id="status"
+                      name="status"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 font-modern-sans"
+                      defaultValue="Active"
+                      required
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
+              {/* Family Members Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  Miseensa Maatii
+                </h3>
+                {familyMembers.map((member, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 border p-3 rounded-lg bg-gray-50"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Maqaa Miseensaa"
+                      value={member.name}
+                      onChange={(e) =>
+                        handleFamilyChange(index, "name", e.target.value)
+                      }
+                      className="px-3 py-2 border rounded-md"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Relation (e.g. Haadha, Ilma, Intala)"
+                      value={member.relation}
+                      onChange={(e) =>
+                        handleFamilyChange(index, "relation", e.target.value)
+                      }
+                      className="px-3 py-2 border rounded-md"
+                      required
+                    />
+                    <input
+                      type="number"
+                      placeholder="Umuri (Age)"
+                      value={member.age}
+                      onChange={(e) =>
+                        handleFamilyChange(index, "age", e.target.value)
+                      }
+                      className="px-3 py-2 border rounded-md"
+                    />
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={addFamilyMember}
+                  className="mt-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  + Miseensa Dabaluu
+                </button>
+              </div>
+
+              {/* Action Buttons */}
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
